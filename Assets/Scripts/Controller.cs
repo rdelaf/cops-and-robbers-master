@@ -61,12 +61,13 @@ public class Controller : MonoBehaviour
             }
         }
 
-        //Las casillas adyacentes a esta tendrán una distancia de 1 y las verticales de 8 posiciones
+        //Las casillas adyacentes a esta tendrán una distancia de 1/-1 en horizontal
+        //y de 8/-8 posiciones en vertical
         for(int file = 0; file <= Constants.NumTiles -1; file++)
         {
-            for (int col = 0; col <= Constants.NumTiles - 1; col++)
+            for (int col = 0; col <= Constants.NumTiles -1; col++)
             {
-                if (col - file == 8 || col - file == -8 || (col - file == 1 && col % 8 != 0) || (col - file == -1 && file % 8 != 0)) matriu[file, col] = 1;
+                if (col - file == 8 || col - file == -8 || (col - file == -1 && file % 8 != 0) || (col - file == 1 && col % 8 != 0)) matriu[file, col] = 1;
                 else matriu[file, col] = 0;
             }
         }
@@ -76,7 +77,7 @@ public class Controller : MonoBehaviour
         {
             for (int col = 0; col <= Constants.NumTiles - 1; col++)
             {
-                if (matriu[i, col] == 1) tiles[i].adjacency.Add(i*8+col);
+                if (matriu[i, col] == 1) tiles[i].adjacency.Add(col);
             }
         }
     }
@@ -212,7 +213,8 @@ public class Controller : MonoBehaviour
 
     public void FindSelectableTiles(bool cop)
     {    
-        int indexcurrentTile;        
+        int indexcurrentTile;    
+        int adyacencyLenght = tiles[cops[clickedCop].GetComponent<CopMove>().currentTile].adjacency.Count;
 
         if (cop == true) indexcurrentTile = cops[clickedCop].GetComponent<CopMove>().currentTile;
         else indexcurrentTile = robber.GetComponent<RobberMove>().currentTile;
@@ -223,13 +225,19 @@ public class Controller : MonoBehaviour
         //Cola para el BFS
         Queue<Tile> nodes = new Queue<Tile>();
 
-        //TODO: Implementar BFS. Los nodos seleccionables los ponemos como selectable=true
-        //Tendrás que cambiar este código por el BFS
-        for(int i = 0; i < Constants.NumTiles; i++)
+        for (int j = 0; j <= adyacencyLenght - 1; j++)
         {
-            tiles[i].selectable = true;
+            Debug.Log(tiles[cops[clickedCop].GetComponent<CopMove>().currentTile].adjacency[j]);
         }
 
-
+        //TODO: Implementar BFS. Los nodos seleccionables los ponemos como selectable=true
+        //Tendrás que cambiar este código por el BFS
+        for (int i = 0; i < Constants.NumTiles; i++)
+        {
+            for(int j = 0; j <= adyacencyLenght-1; j++)
+            {
+                if (tiles[i].numTile == tiles[cops[clickedCop].GetComponent<CopMove>().currentTile].adjacency[j]) tiles[i].selectable = true;
+            }
+        }
     }  
 }
