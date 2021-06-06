@@ -162,12 +162,15 @@ public class Controller : MonoBehaviour
         tiles[clickedTile].current = true;
         FindSelectableTiles(false);
 
-        /*TODO: Cambia el código de abajo para hacer lo siguiente
-        - Elegimos una casilla aleatoria entre las seleccionables que puede ir el caco
-        - Movemos al caco a esa casilla
-        - Actualizamos la variable currentTile del caco a la nueva casilla
-        */
-        robber.GetComponent<RobberMove>().MoveToTile(tiles[robber.GetComponent<RobberMove>().currentTile]);
+        //Elegimos una casilla aleatoria entre las seleccionables que puede ir el caco
+        int randomLenght = tiles[cops[clickedCop].GetComponent<CopMove>().currentTile].adjacency.Count;
+        int randomTileRobber = tiles[robber.GetComponent<RobberMove>().currentTile].adjacency[Random.Range(0, randomLenght)];
+
+        //Movemos al caco a esa casilla
+        robber.GetComponent<RobberMove>().MoveToTile(tiles[randomTileRobber]);
+
+        //Actualizamos la variable currentTile del caco a la nueva casilla
+        robber.GetComponent<RobberMove>().currentTile = randomTileRobber;
     }
 
     public void EndGame(bool end)
@@ -214,7 +217,6 @@ public class Controller : MonoBehaviour
     public void FindSelectableTiles(bool cop)
     {    
         int indexcurrentTile;    
-        int adyacencyLenght = tiles[cops[clickedCop].GetComponent<CopMove>().currentTile].adjacency.Count;
 
         if (cop == true) indexcurrentTile = cops[clickedCop].GetComponent<CopMove>().currentTile;
         else indexcurrentTile = robber.GetComponent<RobberMove>().currentTile;
@@ -225,16 +227,9 @@ public class Controller : MonoBehaviour
         //Cola para el BFS
         Queue<Tile> nodes = new Queue<Tile>();
 
-        for (int j = 0; j <= adyacencyLenght - 1; j++)
-        {
-            Debug.Log(tiles[cops[clickedCop].GetComponent<CopMove>().currentTile].adjacency[j]);
-        }
-
-        //TODO: Implementar BFS. Los nodos seleccionables los ponemos como selectable=true
-        //Tendrás que cambiar este código por el BFS
         for (int i = 0; i < Constants.NumTiles; i++)
         {
-            for(int j = 0; j <= adyacencyLenght-1; j++)
+            for(int j = 0; j <= tiles[cops[clickedCop].GetComponent<CopMove>().currentTile].adjacency.Count -1; j++)
             {
                 if (tiles[i].numTile == tiles[cops[clickedCop].GetComponent<CopMove>().currentTile].adjacency[j]) tiles[i].selectable = true;
             }
