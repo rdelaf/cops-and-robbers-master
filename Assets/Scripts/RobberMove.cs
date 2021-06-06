@@ -4,23 +4,13 @@ using UnityEngine;
 
 public class RobberMove : Movement
 {
-
     public GameObject controller;
 
     public bool finishing = false;
     public bool restarting = false;
          
     private float x_finish = 0;
-    private float z_finish = 0;
-              
-    public void Restart(Tile t)
-    {
-        currentTile = t.numTile;
-        MoveToTile(t);
-        finishing = false;
-        moveSpeed = Constants.MoveSpeed;
-        restarting = true;        
-    }
+    private float z_finish = 0;   
                 
     void Update()
     {
@@ -28,7 +18,7 @@ public class RobberMove : Movement
         {            
             Move();  
         }
-        if (finishing)
+        if(finishing)
         {
             Finish();
         }
@@ -56,28 +46,6 @@ public class RobberMove : Movement
         }
     }
 
-    //Movimiento especial hacia una posición fuera del tablero
-    public void Finish()
-    {               
-        Vector3 target = new Vector3(x_finish, 2.5f, z_finish);
-
-        if ((Mathf.Abs(transform.position.x - target.x) >= 0.05f) || (Mathf.Abs(transform.position.z - target.z) >= 0.05f))
-            {
-                CalculateHeading(target);
-                SetVelocity();
-
-                transform.forward = heading;
-                transform.position += velocity * Time.deltaTime*2;
-            }
-            else
-            {                
-                transform.position = target;
-                Physics.gravity = new Vector3(0, -1f, 0);
-                finishing = false;
-                moving = false;            
-            }                
-    }
-
     //Recibimos colisión. Nos han capturado
     private void OnCollisionEnter(Collision collision)
     { 
@@ -103,7 +71,8 @@ public class RobberMove : Movement
                     z_finish = transform.position.z + 15f;
                 }
             }
-            else//Poli y caco están en la misma horizontal. Le pega por la izquierda o por la derecha
+            //Poli y caco están en la misma horizontal. Le pega por la izquierda o por la derecha
+            else
             {
                 if (vertical > 0)
                 {                    
@@ -121,5 +90,34 @@ public class RobberMove : Movement
         }
     }
 
-   
+    public void Restart(Tile t)
+    {
+        currentTile = t.numTile;
+        MoveToTile(t);
+        finishing = false;
+        moveSpeed = Constants.MoveSpeed;
+        restarting = true;
+    }
+
+    //Movimiento especial hacia una posición fuera del tablero
+    public void Finish()
+    {
+        Vector3 target = new Vector3(x_finish, 2.5f, z_finish);
+
+        if ((Mathf.Abs(transform.position.x - target.x) >= 0.05f) || (Mathf.Abs(transform.position.z - target.z) >= 0.05f))
+        {
+            CalculateHeading(target);
+            SetVelocity();
+
+            transform.forward = heading;
+            transform.position += velocity * Time.deltaTime * 2;
+        }
+        else
+        {
+            transform.position = target;
+            Physics.gravity = new Vector3(0, -1f, 0);
+            finishing = false;
+            moving = false;
+        }
+    }
 }

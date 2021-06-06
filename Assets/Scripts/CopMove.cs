@@ -14,21 +14,10 @@ public class CopMove : Movement
         }
     }
 
-    public void Restart(Tile t)
-    {
-        currentTile = t.numTile;
-        MoveToTile(t);
-    }
-
-    private void OnMouseDown()
-    {        
-        controller.GetComponent<Controller>().ClickOnCop(id);        
-    }
-           
     public void Move()
     {
         //Si aún nos quedan casillas a las que desplazarnos
-        if(path.Count > 0)
+        if (path.Count > 0)
         {
             DoMove();
         }
@@ -39,5 +28,14 @@ public class CopMove : Movement
         }
     }
 
-    
+    public void Restart(Tile t)
+    {
+        currentTile = t.numTile;
+        MoveToTile(t);
+    }
+
+    private void OnMouseDown()
+    {        
+        controller.GetComponent<Controller>().ClickOnCop(id);        
+    }
 }

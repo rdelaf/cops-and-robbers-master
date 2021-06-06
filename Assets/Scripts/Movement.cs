@@ -49,7 +49,6 @@ public class Movement : MonoBehaviour
         {   //Hemos llegado al centro de la casilla         
             transform.position = target;            
             path.Pop();                    
-
         }
     }      
 
@@ -63,6 +62,4 @@ public class Movement : MonoBehaviour
     {
         velocity = heading * moveSpeed;
     }
-
-
 }

@@ -51,12 +51,34 @@ public class Controller : MonoBehaviour
         //Matriz de adyacencia
         int[,] matriu = new int[Constants.NumTiles, Constants.NumTiles];
 
-        //TODO: Inicializar matriz a 0's
+        //Inicializamos a 0
+        for(int i = 0; i <= Constants.NumTiles - 1; i++) 
+        {
+            for (int j = 0; j <= Constants.NumTiles - 1; j++)
+            {
+                matriu[i, j] = 0;
+                Debug.Log(matriu[i, j]);
+            }
+        }
 
-        //TODO: Para cada posición, rellenar con 1's las casillas adyacentes (arriba, abajo, izquierda y derecha)
+        //Las casillas adyacentes a esta tendrán una distancia de 1 y las verticales de 8 posiciones
+        for(int file = 0; file <= Constants.NumTiles -1; file++)
+        {
+            for (int col = 0; col <= Constants.NumTiles - 1; col++)
+            {
+                if (col - file == 8 || col - file == -8 || (col - file == 1 && col % 8 != 0) || (col - file == -1 && file % 8 != 0)) matriu[file, col] = 1;
+                else matriu[file, col] = 0;
+            }
+        }
 
-        //TODO: Rellenar la lista "adjacency" de cada casilla con los índices de sus casillas adyacentes
-
+        //Decimos a cada casilla cual es adyacente a ella comprobándolo en matriu[]
+        for(int i = 0; i <= tiles.Length -1; i++)
+        {
+            for (int col = 0; col <= Constants.NumTiles - 1; col++)
+            {
+                if (matriu[i, col] == 1) tiles[i].adjacency.Add(i*8+col);
+            }
+        }
     }
 
     //Reseteamos cada casilla: color, padre, distancia y visitada
@@ -131,7 +153,6 @@ public class Controller : MonoBehaviour
                     EndGame(false);
                 break;
         }
-
     }
 
     public void RobberTurn()
@@ -150,12 +171,16 @@ public class Controller : MonoBehaviour
 
     public void EndGame(bool end)
     {
-        if(end)
+        if (end) 
+        {
             finalMessage.text = "You Win!";
-        else
+        }
+        else 
+        {
             finalMessage.text = "You Lose!";
-        playAgainButton.interactable = true;
-        state = Constants.End;
+            playAgainButton.interactable = true;
+            state = Constants.End;
+        }
     }
 
     public void PlayAgain()
@@ -176,8 +201,7 @@ public class Controller : MonoBehaviour
 
     public void InitGame()
     {
-        state = Constants.Init;
-         
+        state = Constants.Init;  
     }
 
     public void IncreaseRoundCount()
@@ -187,14 +211,11 @@ public class Controller : MonoBehaviour
     }
 
     public void FindSelectableTiles(bool cop)
-    {
-                 
+    {    
         int indexcurrentTile;        
 
-        if (cop==true)
-            indexcurrentTile = cops[clickedCop].GetComponent<CopMove>().currentTile;
-        else
-            indexcurrentTile = robber.GetComponent<RobberMove>().currentTile;
+        if (cop == true) indexcurrentTile = cops[clickedCop].GetComponent<CopMove>().currentTile;
+        else indexcurrentTile = robber.GetComponent<RobberMove>().currentTile;
 
         //La ponemos rosa porque acabamos de hacer un reset
         tiles[indexcurrentTile].current = true;
@@ -210,14 +231,5 @@ public class Controller : MonoBehaviour
         }
 
 
-    }
-    
-   
-    
-
-    
-
-   
-
-       
+    }  
 }

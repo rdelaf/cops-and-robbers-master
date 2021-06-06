@@ -13,8 +13,8 @@ public class Tile : MonoBehaviour
             
     //Variables para el BFS
     public bool visited = false;
-    public Tile parent = null;//Casilla a través de la que llegamos
-    public int distance = 0;//Distancia del original
+    public Tile parent = null; //Casilla a través de la que llegamos
+    public int distance = 0; //Distancia del original
         
     private void Awake()
     {     
@@ -56,5 +56,5 @@ public class Tile : MonoBehaviour
         parent = null;
         distance = 0;
     }
- 
+
 }
